@@ -10,12 +10,13 @@ model = joblib.load("model.pkl")
 
 templates = Jinja2Templates(directory="templates")
 
+
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
     return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
+        request=request,
+        name="index.html",
+        context={
             "prediction": None
         }
     )
@@ -27,7 +28,7 @@ async def predict(request: Request):
     form = await request.form()
 
     data = {
-        "site": form["site"],
+        "site": int(form["site"]),
         "Pop": form["Pop"],
         "sex": form["sex"],
         "hdlngth": float(form["hdlngth"]),
@@ -46,9 +47,9 @@ async def predict(request: Request):
     prediction = model.predict(input_df)[0]
 
     return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
-            "prediction": round(prediction, 2)
+        request=request,
+        name="index.html",
+        context={
+            "prediction": round(float(prediction), 2)
         }
     )
