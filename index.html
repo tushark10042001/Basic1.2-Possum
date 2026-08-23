@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Age Prediction</title>
+</head>
+
+<body>
+
+    <h1>Age Prediction</h1>
+
+    <form action="/predict" method="post">
+
+        <label>Site:</label>
+        <select name="site" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+        </select>
+
+        <br><br>
+
+        <label>Population:</label>
+        <select name="Pop" required>
+            <option value="Vic">Vic</option>
+            <option value="other">other</option>
+        </select>
+
+        <br><br>
+
+        <label>Sex:</label>
+        <select name="sex" required>
+            <option value="m">Male</option>
+            <option value="f">Female</option>
+        </select>
+
+        <br><br>
+
+        <label>Head Length:</label>
+        <input type="number" step="any" name="hdlngth" required>
+
+        <br><br>
+
+        <label>Skull Width:</label>
+        <input type="number" step="any" name="skullw" required>
+
+        <br><br>
+
+        <label>Total Length:</label>
+        <input type="number" step="any" name="totlngth" required>
+
+        <br><br>
+
+        <label>Tail Length:</label>
+        <input type="number" step="any" name="taill" required>
+
+        <br><br>
+
+        <label>Foot Length:</label>
+        <input type="number" step="any" name="footlgth" required>
+
+        <br><br>
+
+        <label>Ear Length:</label>
+        <input type="number" step="any" name="earconch" required>
+
+        <br><br>
+
+        <label>Eye:</label>
+        <input type="number" step="any" name="eye" required>
+
+        <br><br>
+
+        <label>Chest:</label>
+        <input type="number" step="any" name="chest" required>
+
+        <br><br>
+
+        <label>Belly:</label>
+        <input type="number" step="any" name="belly" required>
+
+        <br><br>
+
+        <button type="submit">Predict Age</button>
+
+    </form>
+
+</body>
+
+</html>
