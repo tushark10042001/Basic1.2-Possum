@@ -1,6 +1,5 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI, Form
+from fastapi.responses import FileResponse, HTMLResponse
 import pandas as pd
 import joblib
 
@@ -8,48 +7,60 @@ app = FastAPI()
 
 model = joblib.load("model.pkl")
 
-templates = Jinja2Templates(directory="templates")
 
-
-@app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={
-            "prediction": None
-        }
-    )
+@app.get("/")
+def home():
+    return FileResponse("index.html")
 
 
 @app.post("/predict", response_class=HTMLResponse)
-async def predict(request: Request):
+def predict(
+    site: int = Form(...),
+    Pop: str = Form(...),
+    sex: str = Form(...),
+    hdlngth: float = Form(...),
+    skullw: float = Form(...),
+    totlngth: float = Form(...),
+    taill: float = Form(...),
+    footlgth: float = Form(...),
+    earconch: float = Form(...),
+    eye: float = Form(...),
+    chest: float = Form(...),
+    belly: float = Form(...)
+):
 
-    form = await request.form()
+    data = pd.DataFrame([{
+        "site": site,
+        "Pop": Pop,
+        "sex": sex,
+        "hdlngth": hdlngth,
+        "skullw": skullw,
+        "totlngth": totlngth,
+        "taill": taill,
+        "footlgth": footlgth,
+        "earconch": earconch,
+        "eye": eye,
+        "chest": chest,
+        "belly": belly
+    }])
 
-    data = {
-        "site": int(form["site"]),
-        "Pop": form["Pop"],
-        "sex": form["sex"],
-        "hdlngth": float(form["hdlngth"]),
-        "skullw": float(form["skullw"]),
-        "totlngth": float(form["totlngth"]),
-        "taill": float(form["taill"]),
-        "footlgth": float(form["footlgth"]),
-        "earconch": float(form["earconch"]),
-        "eye": float(form["eye"]),
-        "chest": float(form["chest"]),
-        "belly": float(form["belly"])
-    }
+    prediction = model.predict(data)[0]
 
-    input_df = pd.DataFrame([data])
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Age Prediction</title>
+    </head>
 
-    prediction = model.predict(input_df)[0]
+    <body>
 
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={
-            "prediction": round(float(prediction), 2)
-        }
-    )
+        <h1>Age Prediction</h1>
+
+        <h2>Predicted Age: {prediction:.2f}</h2>
+
+        <a href="/">Make another prediction</a>
+
+    </body>
+    </html>
+    """
